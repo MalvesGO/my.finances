@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>my.finances €</title>
+    <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+
+<body>
+
+    <header id="logo">
+        <div class="container">
+            <div class="info">
+                <h1>my.finances € </h1>
+                <div class="user">
+                    <img class="user-img" src="https://avatars.githubusercontent.com/u/10326782?s=460&u=0657c674e06a4bd9f7d0be4a6fb950a75de66a1b&v=4" width="60" height="60">
+                    <a href="#"> Marcelo Alves <i class="material-icons">arrow_drop_down</i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="balance">
+            <h2 class="sr-only">Balanço</h2>
+
+            <div class="card">
+                <h3>
+                    <span>Entradas</span>
+                    <img src="./assets/income.svg" alt="entradas">
+                </h3>
+                <p>€ <span class="entradas"></span></p>
+            </div>
+
+            <div class="card">
+                <h3>
+                    <span>Saídas</span>
+                    <img src="./assets/expense.svg" alt="saidas">
+                </h3>
+                <p>€ <span class="saidas"></span></p>
+            </div>
+
+            <div class="card total">
+                <h3>
+                    <span>Total</span>
+                    <img src="./assets/total.svg" alt="total">
+                </h3>
+                <p>€ <span class="total_final"></span></p>
+            </div>
+        </section>
+
+        <section id="transaction">
+            <h2 class="sr-only">Transações</h2>
+            <a class="button new" onclick="Modal.open()" href="#">+ NOVA TRANSAÇÃO</a>
+            <div class="scroll-list">
+                <div class="scroll-list__wrp js-scroll-content js-scroll-list items"></div>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal-overlay">
+        <div class="modal">
+            <div id="form">
+                <h2>Nova Transação</h2>
+                <form action="">
+                    <div class="input-group">
+                        <label class="sr-only" for="description">Descrição</label>
+                        <input type="text" id="description" name="description" placeholder="Descrição">
+                    </div>
+                    <div class="input-group">
+                        <label class="sr-only" for="ammount">Valor</label>
+                        <input type="number" step="0.01" id="ammount" name="ammount" placeholder="0,00">
+                        <small class="help">Use o sinal - (negativo) para despesas e, (virgula) para casas
+                            decimais</small>
+                    </div>
+                    <div class="input-group">
+                        <label class="sr-only" for="date">Data</label>
+                        <input type="date" id="date" name="date">
+                    </div>
+
+                    <div class="input-group actions">
+                        <a href="#" onclick="Modal.close()" class="button cancel">Cancelar</a>
+                        <button>Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>2021 - my.finances €</footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scrollbar/8.3.1/smooth-scrollbar.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scrollbar/8.3.1/plugins/overscroll.js"></script>
+
+
+    <script>
+
+        $(document).ready(function () {
+            
+            var Scrollbar = window.Scrollbar;
+
+            Scrollbar.use(window.OverscrollPlugin);
+
+            var customScroll = Scrollbar.init(document.querySelector('.js-scroll-list'), {
+                plugins: {
+                    overscroll: true
+                }
+            });
+
+            var listItem = $('.js-scroll-list-item');
+
+            listItem.eq(0).addClass('item-focus');
+            listItem.eq(1).addClass('item-next');
+
+            customScroll.addListener(function (status) {
+
+                var $content = $('.js-scroll-content');
+
+                var viewportScrollDistance = 0;
+
+                viewportScrollDistance = status.offset.y;
+                var viewportHeight = $content.height();
+                var listHeight = 0;
+                var $listItems = $content.find('.js-scroll-list-item');
+                for (var i = 0; i < $listItems.length; i++) {
+                    listHeight += $($listItems[i]).height();
+                }
+
+                var top = status.offset.y;
+                // console.log(top);
+                var visibleCenterVertical = 0;
+                visibleCenterVertical = top;
+
+                var parentTop = 1;
+                var $lis = $('.js-scroll-list-item');
+                var $focusLi;
+                for (var i = 0; i < $lis.length; i++) {
+                    var $li = $($lis[i]);
+                    var liTop = $li.position().top;
+                    var liRelTop = liTop - parentTop;
+
+                    var distance = 0;
+                    var distance = Math.abs(top - liRelTop);
+                    var maxDistance = $('.js-scroll-content').height() / 2;
+                    var distancePercent = distance / (maxDistance / 100);
+
+
+                    if (liRelTop + $li.parent().scrollTop() > top) {
+                        if (!$li.hasClass('item-focus')) {
+                            $li.prev().addClass('item-hide');
+                            $lis.removeClass('item-focus');
+                            $lis.removeClass('item-next');
+                        }
+                        $li.removeClass('item-hide');
+                        $li.addClass('item-focus');
+                        $li.next().addClass('item-next');
+                        break;
+                    }
+                }
+            });
+
+        });
+
+        Modal = {
+            open() {
+                document.querySelector('.modal-overlay').classList.add('active')
+            },
+            close() {
+                document.querySelector('.modal-overlay').classList.remove('active')
+            }
+        }
+
+        var contas = [
+            { id: 1, name: "Gasolina", valor: -32, data: "21/01/2020" },
+            { id: 2, name: "Venda de Website", valor: 1000, data: "21/01/2020" },
+            { id: 3, name: "Reparação PC", valor: 120, data: "22/01/2020" },
+            { id: 4, name: "MB WAY - Notebook", valor: 1120, data: "22/01/2020" },
+            { id: 2, name: "Almoço", valor: -10, data: "21/01/2020" },
+            { id: 3, name: "Reparação PC", valor: 120, data: "22/01/2020" },
+            { id: 4, name: "Pagamento MEO", valor: -1120, data: "22/01/2020" },
+            { id: 2, name: "Venda de Website", valor: 1000, data: "21/01/2020" },
+            { id: 3, name: "Reparação PC", valor: 120, data: "22/01/2020" },
+            { id: 4, name: "Pagamento MEO", valor: -1120, data: "22/01/2020" },
+            { id: 2, name: "Venda de Website", valor: 5000, data: "21/01/2020" },
+            { id: 3, name: "Reparação PC", valor: 120, data: "22/01/2020" },
+            { id: 4, name: "Pagamento MEO", valor: -1120, data: "22/01/2020" },
+        ]
+
+        var total = (contas.map((total) => total.valor).reduce((total, valor) =>
+            total + valor
+        ))
+
+        $('.total_final').html(total)
+
+        positive = contas.filter(function (a) { return a.valor >= 0; })
+        negative = contas.filter(function (a) { return a.valor < 0; })
+
+        var entradas = (positive.map((total) => total.valor).reduce((total, valor) =>
+            total + valor
+        ))
+
+        $('.entradas').html(entradas)
+
+        var saidas = (negative.map((total) => total.valor).reduce((total, valor) =>
+            total + valor
+        ))
+
+        $('.saidas').html(saidas)
+
+
+        contas.forEach(element => {
+
+            if (element.valor < 0) {
+                $('.items').append(
+                    '<div class="scroll-list__item js-scroll-list-item">' +
+                    '<div style="padding: 1rem;display: flex;  align-items: center; justify-content: space-between;">' +
+                    '<h3>' + element.name + '</h3>' +
+                    '<img src="./assets/expense.svg" alt="entradas">' +
+                    '</div>' +
+                    '<div style="padding: 0 1rem;display: flex;  align-items: center; justify-content: space-between;">' +
+                    '<span class="expense">€ ' + element.valor + ' </span>' +
+                    '<a href="#" id="' + element.id + '" class="remove"> Remover' +
+                    '</div>' +
+                    '</div>'
+                )
+            } else {
+                $('.items').append(
+                    '<div class="scroll-list__item js-scroll-list-item">' +
+                    '<div style="padding: 1rem;display: flex;  align-items: center; justify-content: space-between;">' +
+                    '<h3>' + element.name + '</h3>' +
+                    '<img src="./assets/income.svg" alt="entradas">' +
+                    '</div>' +
+                    '<div style="padding: 0 1rem;display: flex;  align-items: center; justify-content: space-between;">' +
+                    '<span class="income">€ ' + element.valor + ' </span>' +
+                    '<a href="#" class= id="' + element.id + '" class="remove"> Remover' +
+                    '</div>' +
+                    '</div>'
+                )
+            }
+        });
+
+        $('.remove').click(function () {
+            var id = $(this).attr('id');
+            $(this).parent().remove();
+        })
+
+    </script>
+
+</body>
+
+</html>
