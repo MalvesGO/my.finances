@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> my.finances € </title>
+
+    <link rel="stylesheet" href="./styles/style.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.0/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scrollbar/8.3.1/smooth-scrollbar.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scrollbar/8.3.1/plugins/overscroll.js"></script>
+</head>
+
+<body>
+
+    <header id="logo">
+        <div class="container">
+            <div class="info">
+                <h1>my.finances € </h1>
+                <div class="user">
+                    <img class="user-img"
+                        src="https://avatars.githubusercontent.com/u/10326782?s=460&u=0657c674e06a4bd9f7d0be4a6fb950a75de66a1b&v=4"
+                        width="60" height="60">
+                    <ul>
+                        <li class="drop">
+                            <a href="#"> Marcelo Alves</a>
+                            <div class="dropdownContain">
+                                <div class="dropOut">
+                                    <div class="triangle"></div>
+                                    <ul>
+                                        <li onclick="location.href = '/'">Minha conta</li>
+                                        <li onclick="location.href = '/relatorios'">Relatórios</li>
+                                        <li>Sair</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="balance">
+            <h2 class="sr-only">Balanço</h2>
+
+            <div class="card">
+                <h3>
+                    <span>Entradas</span>
+                    <img src="./assets/income.svg" alt="entradas">
+                </h3>
+                <p>€ <span class="entradas"></span></p>
+            </div>
+
+            <div class="card">
+                <h3>
+                    <span>Saídas</span>
+                    <img src="./assets/expense.svg" alt="saidas">
+                </h3>
+                <p>€ <span class="saidas"></span></p>
+            </div>
+
+            <div class="card total">
+                <h3>
+                    <span>Total</span>
+                    <img src="./assets/total.svg" alt="total">
+                </h3>
+                <p>€ <span class="total_final"></span></p>
+            </div>
+        </section>
+
+        <h1>Relatórios</h1>
+
+    </main>
+
+
+
+    <footer>2021 - my.finances €</footer>
+
+</body>
+
+</html>

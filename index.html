@@ -11,13 +11,157 @@
 
 <body>
 
+    <style>
+        /*---------- Wrapper --------------------*/
+
+        ul {
+            text-align: center;
+        }
+
+        ul li {
+            font: 13px Verdana, 'Lucida Grande';
+            cursor: pointer;
+            -webkit-transition: padding .05s linear;
+            -moz-transition: padding .05s linear;
+            -ms-transition: padding .05s linear;
+            -o-transition: padding .05s linear;
+            transition: padding .05s linear;
+        }
+
+        ul li.drop {
+            position: relative;
+        }
+
+        ul>li {
+            display: inline-block;
+        }
+
+        ul li a {
+            line-height: 80px;
+            padding: 0;
+            height: 80px;
+            color: #777;
+            -webkit-transition: all .1s ease-out;
+            -moz-transition: all .1s ease-out;
+            -ms-transition: all .1s ease-out;
+            -o-transition: all .1s ease-out;
+            transition: all .1s ease-out;
+        }
+
+        ul li a:hover {
+            color: #eee;
+        }
+
+        .dropOut .triangle {
+            width: 0;
+            height: 0;
+            position: absolute;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 8px solid white;
+            top: -8px;
+            left: 50%;
+            margin-left: -8px;
+        }
+
+        .dropdownContain {
+            width: 160px;
+            position: absolute;
+            z-index: 2;
+            left: 50%;
+            margin-left: -80px;
+            /* half of width */
+            top: -400px;
+        }
+
+        .dropOut {
+            width: 160px;
+            background: white;
+            float: left;
+            position: relative;
+            margin-top: 0px;
+            opacity: 0;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+            -webkit-box-shadow: 0 1px 6px rgba(0, 0, 0, .15);
+            -moz-box-shadow: 0 1px 6px rgba(0, 0, 0, .15);
+            box-shadow: 0 1px 6px rgba(0, 0, 0, .15);
+            -webkit-transition: all .1s ease-out;
+            -moz-transition: all .1s ease-out;
+            -ms-transition: all .1s ease-out;
+            -o-transition: all .1s ease-out;
+            transition: all .1s ease-out;
+        }
+
+        .dropOut ul {
+            float: left;
+            padding: 10px 0;
+        }
+
+        .dropOut ul li {
+            text-align: left;
+            float: left;
+            width: 125px;
+            padding: 12px 0 10px 15px;
+            margin: 0px 10px;
+            color: #777;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+            -webkit-transition: background .1s ease-out;
+            -moz-transition: background .1s ease-out;
+            -ms-transition: background .1s ease-out;
+            -o-transition: background .1s ease-out;
+            transition: background .1s ease-out;
+        }
+
+        .dropOut ul li:hover {
+            background: #f6f6f6;
+        }
+
+        ul li:hover a {
+            color: white;
+        }
+
+        ul li:hover .dropdownContain {
+            top: 65px;
+        }
+
+        ul li:hover .underline {
+            border-bottom-color: #777;
+        }
+
+        ul li:hover .dropOut {
+            opacity: 1;
+            margin-top: 8px;
+        }
+    </style>
+
+
     <header id="logo">
         <div class="container">
             <div class="info">
                 <h1>my.finances € </h1>
                 <div class="user">
-                    <img class="user-img" src="https://avatars.githubusercontent.com/u/10326782?s=460&u=0657c674e06a4bd9f7d0be4a6fb950a75de66a1b&v=4" width="60" height="60">
-                    <a href="#"> Marcelo Alves <i class="material-icons">arrow_drop_down</i></a>
+                    <img class="user-img"
+                        src="https://avatars.githubusercontent.com/u/10326782?s=460&u=0657c674e06a4bd9f7d0be4a6fb950a75de66a1b&v=4"
+                        width="60" height="60">
+                    <ul>
+                        <li class="drop">
+                            <a href="#"> Marcelo Alves</a>
+                            <div class="dropdownContain">
+                                <div class="dropOut">
+                                    <div class="triangle"></div>
+                                    <ul>
+                                        <li>Minha conta</li>
+                                        <li>Relatórios</li>
+                                        <li>Sair</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -97,73 +241,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scrollbar/8.3.1/plugins/overscroll.js"></script>
 
 
-    <script>
-
-        $(document).ready(function () {
-            
-            var Scrollbar = window.Scrollbar;
-
-            Scrollbar.use(window.OverscrollPlugin);
-
-            var customScroll = Scrollbar.init(document.querySelector('.js-scroll-list'), {
-                plugins: {
-                    overscroll: true
-                }
-            });
-
-            var listItem = $('.js-scroll-list-item');
-
-            listItem.eq(0).addClass('item-focus');
-            listItem.eq(1).addClass('item-next');
-
-            customScroll.addListener(function (status) {
-
-                var $content = $('.js-scroll-content');
-
-                var viewportScrollDistance = 0;
-
-                viewportScrollDistance = status.offset.y;
-                var viewportHeight = $content.height();
-                var listHeight = 0;
-                var $listItems = $content.find('.js-scroll-list-item');
-                for (var i = 0; i < $listItems.length; i++) {
-                    listHeight += $($listItems[i]).height();
-                }
-
-                var top = status.offset.y;
-                // console.log(top);
-                var visibleCenterVertical = 0;
-                visibleCenterVertical = top;
-
-                var parentTop = 1;
-                var $lis = $('.js-scroll-list-item');
-                var $focusLi;
-                for (var i = 0; i < $lis.length; i++) {
-                    var $li = $($lis[i]);
-                    var liTop = $li.position().top;
-                    var liRelTop = liTop - parentTop;
-
-                    var distance = 0;
-                    var distance = Math.abs(top - liRelTop);
-                    var maxDistance = $('.js-scroll-content').height() / 2;
-                    var distancePercent = distance / (maxDistance / 100);
-
-
-                    if (liRelTop + $li.parent().scrollTop() > top) {
-                        if (!$li.hasClass('item-focus')) {
-                            $li.prev().addClass('item-hide');
-                            $lis.removeClass('item-focus');
-                            $lis.removeClass('item-next');
-                        }
-                        $li.removeClass('item-hide');
-                        $li.addClass('item-focus');
-                        $li.next().addClass('item-next');
-                        break;
-                    }
-                }
-            });
-
-        });
+    <script>        
 
         Modal = {
             open() {
@@ -174,79 +252,151 @@
             }
         }
 
-        var contas = [
-            { id: 1, name: "Gasolina", valor: -32, data: "21/01/2020" },
-            { id: 2, name: "Venda de Website", valor: 1000, data: "21/01/2020" },
-            { id: 3, name: "Reparação PC", valor: 120, data: "22/01/2020" },
-            { id: 4, name: "MB WAY - Notebook", valor: 1120, data: "22/01/2020" },
-            { id: 2, name: "Almoço", valor: -10, data: "21/01/2020" },
-            { id: 3, name: "Reparação PC", valor: 120, data: "22/01/2020" },
-            { id: 4, name: "Pagamento MEO", valor: -1120, data: "22/01/2020" },
-            { id: 2, name: "Venda de Website", valor: 1000, data: "21/01/2020" },
-            { id: 3, name: "Reparação PC", valor: 120, data: "22/01/2020" },
-            { id: 4, name: "Pagamento MEO", valor: -1120, data: "22/01/2020" },
-            { id: 2, name: "Venda de Website", valor: 5000, data: "21/01/2020" },
-            { id: 3, name: "Reparação PC", valor: 120, data: "22/01/2020" },
-            { id: 4, name: "Pagamento MEO", valor: -1120, data: "22/01/2020" },
-        ]
-
-        var total = (contas.map((total) => total.valor).reduce((total, valor) =>
-            total + valor
-        ))
-
-        $('.total_final').html(total)
-
-        positive = contas.filter(function (a) { return a.valor >= 0; })
-        negative = contas.filter(function (a) { return a.valor < 0; })
-
-        var entradas = (positive.map((total) => total.valor).reduce((total, valor) =>
-            total + valor
-        ))
-
-        $('.entradas').html(entradas)
-
-        var saidas = (negative.map((total) => total.valor).reduce((total, valor) =>
-            total + valor
-        ))
-
-        $('.saidas').html(saidas)
 
 
-        contas.forEach(element => {
 
-            if (element.valor < 0) {
-                $('.items').append(
-                    '<div class="scroll-list__item js-scroll-list-item">' +
-                    '<div style="padding: 1rem;display: flex;  align-items: center; justify-content: space-between;">' +
-                    '<h3>' + element.name + '</h3>' +
-                    '<img src="./assets/expense.svg" alt="entradas">' +
-                    '</div>' +
-                    '<div style="padding: 0 1rem;display: flex;  align-items: center; justify-content: space-between;">' +
-                    '<span class="expense">€ ' + element.valor + ' </span>' +
-                    '<a href="#" id="' + element.id + '" class="remove"> Remover' +
-                    '</div>' +
-                    '</div>'
-                )
-            } else {
-                $('.items').append(
-                    '<div class="scroll-list__item js-scroll-list-item">' +
-                    '<div style="padding: 1rem;display: flex;  align-items: center; justify-content: space-between;">' +
-                    '<h3>' + element.name + '</h3>' +
-                    '<img src="./assets/income.svg" alt="entradas">' +
-                    '</div>' +
-                    '<div style="padding: 0 1rem;display: flex;  align-items: center; justify-content: space-between;">' +
-                    '<span class="income">€ ' + element.valor + ' </span>' +
-                    '<a href="#" class= id="' + element.id + '" class="remove"> Remover' +
-                    '</div>' +
-                    '</div>'
-                )
-            }
-        });
+        function load_contas() {
 
-        $('.remove').click(function () {
-            var id = $(this).attr('id');
-            $(this).parent().remove();
-        })
+            var contas = [
+                { id: 1, name: "Gasolina", valor: -32, data: "21/01/2020" },
+                { id: 2, name: "Venda de Website", valor: 1000, data: "21/01/2020" },
+                { id: 3, name: "Reparação PC", valor: 120, data: "22/01/2020" },
+                { id: 4, name: "MB WAY - Notebook", valor: 1120, data: "22/01/2020" },
+                { id: 5, name: "Almoço", valor: -10, data: "21/01/2020" },
+                { id: 6, name: "Reparação PC", valor: 120, data: "22/01/2020" },
+                { id: 7, name: "Pagamento MEO", valor: -1120, data: "22/01/2020" },
+                { id: 8, name: "Venda de Website", valor: 1000, data: "21/01/2020" },
+                { id: 9, name: "Reparação PC", valor: 120, data: "22/01/2020" },
+                { id: 10, name: "Pagamento MEO", valor: -1120, data: "22/01/2020" },
+                { id: 11, name: "Venda de Website", valor: 5000, data: "21/01/2020" },
+                { id: 12, name: "Reparação PC", valor: 120, data: "22/01/2020" },
+                { id: 13, name: "Pagamento MEO", valor: -1120, data: "22/01/2020" },
+            ]
+
+            // $('.new').click(function () {
+
+            //     $('.scroll-content').empty()
+
+            //     contas.push({ id: 14, name: "teste de insert", valor: -1500, data: "21/01/2020" });
+
+            //     contas.forEach(element => {
+
+            //         if (element.valor < 0) {
+
+            //             $('.items').append(
+            //                 '<div class="scroll-list__item js-scroll-list-item">' +
+            //                 '<div style="padding: 1rem;display: flex;  align-items: center; justify-content: space-between;">' +
+            //                 '<h3>' + element.name + '</h3>' +
+            //                 '<img src="./assets/expense.svg" alt="entradas">' +
+            //                 '</div>' +
+            //                 '<div style="padding: 0 1rem;display: flex;  align-items: center; justify-content: space-between;">' +
+            //                 '<span class="expense">€ ' + element.valor + ' </span>' +
+            //                 '<a href="#" id="' + element.id + '" class="remove"> Remover' +
+            //                 '</div>' +
+            //                 '</div>'
+            //             )
+            //         } else {
+            //             $('.items').append(
+            //                 '<div class="scroll-list__item js-scroll-list-item">' +
+            //                 '<div style="padding: 1rem;display: flex;  align-items: center; justify-content: space-between;">' +
+            //                 '<h3>' + element.name + '</h3>' +
+            //                 '<img src="./assets/income.svg" alt="entradas">' +
+            //                 '</div>' +
+            //                 '<div style="padding: 0 1rem;display: flex;  align-items: center; justify-content: space-between;">' +
+            //                 '<span class="income">€ ' + element.valor + ' </span>' +
+            //                 '<a href="#" class= id="' + element.id + '" class="remove"> Remover' +
+            //                 '</div>' +
+            //                 '</div>'
+            //             )
+            //         }
+            //     });
+
+            //     $(".scroll-content").append(
+            //         '<div class="scroll-list__item js-scroll-list-item">' +
+            //         '<div style="padding: 1rem;display: flex;  align-items: center; justify-content: space-between;">' +
+            //         '<h3>' + contas.name + '</h3>' +
+            //         '<img src="./assets/expense.svg" alt="entradas">' +
+            //         '</div>' +
+            //         '<div style="padding: 0 1rem;display: flex;  align-items: center; justify-content: space-between;">' +
+            //         '<span class="expense">€ ' + contas.valor + ' </span>' +
+            //         '<a href="#" id="' + contas.id + '" class="remove"> Remover' +
+            //         '</div>' +
+            //         '</div>'
+            //     );
+
+
+            //     // contas.push({ id: 14, name: "teste de insert", valor: -1500, data: "21/01/2020" });
+            //     // // var id = $(this).attr('id');
+            //     // // $(this).parent().remove();
+            //     // load_contas()
+            // })
+
+            var total = (contas.map((total) => total.valor).reduce((total, valor) =>
+                total + valor
+            ))
+
+            $('.total_final').html(total)
+
+            positive = contas.filter(function (a) { return a.valor >= 0; })
+            negative = contas.filter(function (a) { return a.valor < 0; })
+
+            var entradas = (positive.map((total) => total.valor).reduce((total, valor) =>
+                total + valor
+            ))
+
+            $('.entradas').html(entradas)
+
+            var saidas = (negative.map((total) => total.valor).reduce((total, valor) =>
+                total + valor
+            ))
+
+            $('.saidas').html(saidas)
+
+            contas.forEach(element => {
+
+                if (element.valor < 0) {
+
+                    $('.items').append(
+                        '<div style="cursor: pointer;" class="scroll-list__item js-scroll-list-item">' +
+                        '<div style="padding: 1rem;display: flex;  align-items: center; justify-content: space-between;">' +
+                        '<h3>' + element.name + '</h3>' +
+                        '<img src="./assets/expense.svg" alt="entradas">' +
+                        '</div>' +
+                        '<div style="padding: 0 1rem;display: flex;  align-items: center; justify-content: space-between;">' +
+                        '<span class="expense">€ ' + element.valor + ' </span>' +
+                        '<a href="#" style="color: black" class="remove"> ' + element.data + '' +
+                        '</div>' +
+                        '</div>'
+                    )
+                } else {
+                    $('.items').append(
+                        '<div style="cursor: pointer;" class="scroll-list__item js-scroll-list-item">' +
+                        '<div style="padding: 1rem;display: flex;  align-items: center; justify-content: space-between;">' +
+                        '<h3>' + element.name + '</h3>' +
+                        '<img src="./assets/income.svg" alt="entradas">' +
+                        '</div>' +
+                        '<div style="padding: 0 1rem;display: flex;  align-items: center; justify-content: space-between;">' +
+                        '<span class="income">€ ' + element.valor + ' </span>' +
+                        '<a href="#" style="color: black" class="remove"> ' + element.data + '' +
+                        '</div>' +
+                        '</div>'
+                    )
+                }
+            });
+
+
+        }
+
+        load_contas()
+
+
+        // 
+
+
+
+
+
+
 
     </script>
 
