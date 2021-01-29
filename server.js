@@ -1,6 +1,7 @@
 const express = require('express')
 const path = require('path');
 const mysql = require('mysql');
+require('dotenv').config()
 const { Socket } = require('socket.io');
 
 const app = express();
@@ -23,10 +24,10 @@ app.get('/relatorios', function (req, res) {
 
 // Definições da base de dados
 var connection = mysql.createConnection({
-    host: '85.234.145.18',
-    user: 'myfinances',
-    password: '3?pwTl1GtmNqiy0b',
-    database: 'myfinances'
+    host: process.env.host,
+    user: process.env.user,
+    password: process.env.password,
+    database: process.env.database
 });
 
 app.get('/apontamentos', function (req, res) {
